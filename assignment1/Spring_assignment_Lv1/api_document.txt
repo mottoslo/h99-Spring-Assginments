@@ -1,0 +1,70 @@
+==================================================================
+//전체 게시물 조회//
+
+GET "api/article"
+
+Request : -
+
+Response :  "createdAt" : "timestamp",
+               "modifiedAt" : "timestamp",
+	   "id"            :  Long,
+               "title"          : "title",
+               "content"      : "content",
+               "author"       : "author"
+              
+               ==> ResponseDTO
+
+==================================================================
+//게시물 등록 //
+
+POST "api/article"
+
+Request : 
+	   "title"          : "title",
+               "content"      : "content",
+               "author"       : "author",
+	   "password"   :  "password"
+
+
+Response :
+               {ResponseDTO}
+
+===================================================================
+//특정 게시물 조회(by id)
+
+GET "api/article/{id}"
+
+Request : - 
+
+Response :  {ResponseDTO}
+
+===================================================================
+// 게시물 수정 (by id)//
+
+PUT "api/article/{id}"
+
+Request : 
+	   "title"          : "title",
+               "content"      : "content",
+               "author"       : "author",
+	   "password"   :  "password"
+
+Response : {ResponseDTO}
+
+===================================================================
+// 게시물 삭제 (by id)//
+DELETE "api/article/{id}"
+
+Request : "password" : "password"
+
+Response : "success" : true
+
+===================================================================
+
+
+
+
+
+
+
+

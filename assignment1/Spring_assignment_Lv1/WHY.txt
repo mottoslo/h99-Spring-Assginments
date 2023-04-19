@@ -1,0 +1,28 @@
+<API>
+1. 수정, 삭제 API의 request를 어떤 방식으로 사용하였는지 (param, query, body)
+-수정 : id는 @PathVariable로 받고, 내용은 @RequestBody로 받아 RequestDto에 담았다.
+
+-삭제 : id는 @PathVariable로 받고, Password는 @RequestParam으로 받고싶었으나,
+         Spring에서 DELETE 요청은 쿼리스트링을 파싱하지 않도록 설정되어있어 불가했다.
+         DELETE요청에서도 쿼리스트링을 파싱하도록 설정하는 방법이 있지만, 좋은 방법이라는
+         생각이 들지 않아 Password도 @RequestBody를 통해 받았다.
+
+2. 어떤 상황에 어떤 방식의 request를 써야하는가?
+-@PathVariable : 필요한 변수가 URL로 들어오는 경우
+-@RequestParam : 쿼리스트링으로 받을 수 있는 경우
+                        (변수 많을 때 비효율적)
+-@ModelAttribute : 쿼리스트링을 객체로 파싱하여 받고싶은 경우
+-@RequestBody : JSON형태의 Body를 객체로 파싱하여 받고싶은 경우
+(JSON -> 객체 파싱의 경우 jackson library에서 객체의 기본생성자를 찾을 수 있어야함)
+==> 받으려는 객체에 @NoArgsConstructor 필요
+==> PUT요청을 받는 객체에는 없어도 작동하는 이유 모르겠음 ,,,
+
+3. RESTful한 API를 설계했는가 ?
+-사실 잘 모르겠다. 요청을 받는 경로는 잘 작성한 것 같다.
+
+4. 적절한 관심사 분리를 적용하였는가? (Controller, Repository, Service)
+- YES
+
+5. API 명세서 작성 가이드라인을 검색하여 직접 작성한 API 명세서와 비교
+- 중괄호 생략한 것 제외하면 request와 response는 잘 작성한 것 같다.
+- 에러의 경우와, 변수의 범위까지 정의해놓는 것을 알게되었다.

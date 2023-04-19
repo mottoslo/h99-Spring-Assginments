@@ -1,0 +1,93 @@
+//회원가입페이지 요청// - 미구현
+GET "api/user/register/"
+==================================================================
+// 회원 가입 요청//
+POST "/user/register/"
+
+Request : "userid" : "userid",
+             "username" : "name",
+             "password" : "Password",
+             "email" : "askdjf@naver.com",
+             "admin" : boolean
+             "adminToken" : "asdfasfdsafsaf"
+
+Response : "가입 성공하였습니다" (임시)
+==================================================================
+//로그인페이지 요청// - 미구현
+GET "user/login"
+
+==================================================================
+//로그인 요청//
+POST "user/login"
+
+Request : "userid" : "userid",
+             "password" : "password"
+
+Response : Header => Authorization : Bearer <JWT>
+               redirect:/api/article
+==================================================================
+//전체 게시물 조회//
+
+GET "api/article"
+
+Request : -
+
+Response :  "createdAt" : "timestamp",
+               "modifiedAt" : "timestamp",
+	   "id"            :  Long,
+               "title"          : "title",
+               "content"      : "content",
+               "author"       : "author"
+               == List<ResponseDTO>
+
+==================================================================
+//게시물 등록 //
+
+POST "api/article"
+
+Request :  Header => Authorization : Bearer <JWT>
+             Body =>
+	   "title"          : "title",
+               "content"      : "content"
+
+Response :
+               {ResponseDTO}
+
+===================================================================
+//특정 게시물 조회(by id)
+
+GET "api/article/{id}"
+
+Request : - 
+
+Response :  {ResponseDTO}
+
+===================================================================
+// 게시물 수정 (by id)//
+
+PUT "api/article/{id}"
+
+Request :    Header => Authorization : Bearer <JWT>
+                Body =>
+	   "title"          : "title",
+               "content"      : "content",
+
+Response : {ResponseDTO}
+
+===================================================================
+// 게시물 삭제 (by id)//
+DELETE "api/article/{id}"
+
+Request : Header => Authorization : Bearer <JWT>
+
+Response : "success" : true
+
+===================================================================
+
+
+
+
+
+
+
+

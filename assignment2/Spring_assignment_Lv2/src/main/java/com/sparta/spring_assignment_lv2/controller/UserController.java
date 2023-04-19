@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
     private final UserService userService;
 
-//    @PostMapping("/login")
-//    public String loginRequest(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
-//        return userService.verifyUser(loginRequestDto, response);
-//    }
+    @PostMapping("/login")
+    public String loginRequest(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
+        return userService.verifyUser(loginRequestDto, response);
+    }
 
     @PostMapping("/register")
     public String registerRequest(@RequestBody RegisterRequestDto registerRequestDto){

@@ -2,12 +2,9 @@ package com.sparta.spring_assignment_lv2.entity;
 
 
 import com.sparta.spring_assignment_lv2.dto.ArticleRequestDto;
-import com.sparta.spring_assignment_lv2.dto.ArticleRequestDto;
-import com.sparta.spring_assignment_lv2.entity.Timestamped;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +19,9 @@ public class Article extends Timestamped {
     private String author;
     private String password;
     private String content;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private Users user;
 
     public Article(ArticleRequestDto requestDto) {
         this.title = requestDto.getTitle();

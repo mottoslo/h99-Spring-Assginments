@@ -56,22 +56,22 @@ public class ArticleService {
         Article found = findById(id);
         return new ArticleResponseDto(found);
     }
-    @Transactional
-    public ArticleResponseDto editArticleById(Long id, ArticleRequestDto requestDto) {
-        Article found = findById(id);
-        if (checkpw(found, requestDto.getPassword())) {
-            found.update(requestDto);
-        }
-        return new ArticleResponseDto(found);
-    }
-    @Transactional
-    public DeleteResponseDto deleteArticleById(Long id, DeleteRequestDto requestDto) {
-        Article found = findById(id);
-        if(checkpw(found, requestDto.getPassword())) {
-            articleRepository.deleteById(id);
-            return new DeleteResponseDto(true);
-        }
-        return new DeleteResponseDto(false);
-
-    }
+//    @Transactional
+//    public ArticleResponseDto editArticleById(Long id, ArticleRequestDto requestDto) {
+//        Article found = findById(id);
+//        if (checkpw(found, requestDto.getPassword())) {
+//            found.update(requestDto);
+//        }
+//        return new ArticleResponseDto(found);
+//    }
+//    @Transactional
+//    public DeleteResponseDto deleteArticleById(Long id, DeleteRequestDto requestDto) {
+//        Article found = findById(id);
+//        if(checkpw(found, requestDto.getPassword())) {
+//            articleRepository.deleteById(id);
+//            return new DeleteResponseDto(true);
+//        }
+//        return new DeleteResponseDto(false);
+//
+//    }
 }

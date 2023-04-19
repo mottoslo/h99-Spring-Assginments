@@ -22,7 +22,7 @@ public class ArticleController {
 
     @PostMapping("/article")
     public ArticleResponseDto postArticle(@RequestBody ArticleRequestDto requestDto){
-        return articleService.postArticle(requestDto);
+        return articleService.postArticle(requestDto, "123");
     } // 신규 게시물 등록
 
     @GetMapping("/article/{id}")
@@ -30,17 +30,13 @@ public class ArticleController {
         return articleService.getArticleById(id);
     } // 게시물 ID로 찾기
 
-    @PutMapping("/article/{id}")
-    public ArticleResponseDto editArticleById(@PathVariable Long id, @RequestBody ArticleRequestDto requestDto){
-        return articleService.editArticleById(id, requestDto);
-    }
-
-    @DeleteMapping("/article/{id}")
-    public DeleteResponseDto deleteArticleById(@PathVariable Long id, @RequestBody DeleteRequestDto requestDto){
-        return articleService.deleteArticleById(id, requestDto);
-    }
-
-
-
-
+//    @PutMapping("/article/{id}")
+//    public ArticleResponseDto editArticleById(@PathVariable Long id, @RequestBody ArticleRequestDto requestDto){
+//        return articleService.editArticleById(id, requestDto);
+//    }
+//
+//    @DeleteMapping("/article/{id}")
+//    public DeleteResponseDto deleteArticleById(@PathVariable Long id, @RequestBody DeleteRequestDto requestDto){
+//        return articleService.deleteArticleById(id, requestDto);
+//    }
 }

@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class ArticleRequestDto {
-    private String title;
-    private String content;
+    private final String title;
+    private final String content;
 
-    public ArticleRequestDto(String title, String author, String password, String content) {
+    public ArticleRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
     }

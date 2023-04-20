@@ -2,6 +2,7 @@ package com.sparta.spring_assignment_lv2.dto;
 
 
 import com.sparta.spring_assignment_lv2.entity.Article;
+import com.sparta.spring_assignment_lv2.entity.Users;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class ArticleResponseDto {
         this.modifiedAt = article.getModifiedAt();
         this.id = article.getId();
         this.title = article.getTitle();
-        this.author = article.getAuthor();
+        this.author = article.getUser().getUserId();
         this.content = article.getContent();
     }
 

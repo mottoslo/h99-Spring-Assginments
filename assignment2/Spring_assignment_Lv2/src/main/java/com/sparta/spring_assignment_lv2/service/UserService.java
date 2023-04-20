@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +17,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     public String verifyUser(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        Users user =
-            userRepository.findByUseridAndPassword(
+            userRepository.findByUserIdAndPassword(
                     loginRequestDto.getUserid(),
                     loginRequestDto.getPassword()
             ).orElseThrow(
@@ -43,6 +41,6 @@ public class UserService {
     }
 
     private Boolean getIdExists(String userid) {
-        return userRepository.existsByUserid(userid);
+        return userRepository.existsByUserId(userid);
     }
 }

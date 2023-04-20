@@ -30,6 +30,9 @@ public class UserService {
     }
 
     public String register(RegisterRequestDto registerRequestDto) {
+        try{checkRegisterRequest(registerRequestDto);}
+        catch(Exception e){return e.getMessage();}
+
         if(getIdExists(registerRequestDto.getUserid())){
             return "이미 사용중인 ID입니다";
         }
@@ -37,10 +40,20 @@ public class UserService {
             userRepository.save(new Users(registerRequestDto));
             return "회원가입에 성공하였습니다";
         }
-
     }
 
-    private Boolean getIdExists(String userid) {
+    private boolean checkIdPolicy(String id){return id.matches("^[a-z0-9]{4,10}$");}
+    private boolean checkPwPolicy(String id){return id.matches("^[a-zA-Z0-9]{10,15}$");}
+    private void checkRegisterRequest(RegisterRequestDto registerRequestDto){
+        if(!checkIdPolicy(registerRequestDto.getUserid())){
+            throw new IllegalArgumentException("Id 형식이 올바르지 않습니다");
+        }
+        if(!checkPwPolicy(registerRequestDto.getPassword())){
+            throw new IllegalArgumentException("Pw 형식이 올바르지 않습니다");
+        }
+    }
+    private boolean getIdExists(String userid) {
         return userRepository.existsByUserId(userid);
     }
+
 }

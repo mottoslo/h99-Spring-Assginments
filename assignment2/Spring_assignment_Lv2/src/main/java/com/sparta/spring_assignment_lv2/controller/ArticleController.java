@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ArticleController {
+
     private final ArticleService articleService;
     @GetMapping("/article")
     public List<ArticleResponseDto> getAllArticle(){

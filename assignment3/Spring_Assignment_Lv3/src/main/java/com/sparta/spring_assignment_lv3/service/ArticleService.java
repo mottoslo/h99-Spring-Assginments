@@ -24,6 +24,7 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+    @Transactional
     public Article findById(Long id){
         return articleRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
@@ -68,6 +69,7 @@ public class ArticleService {
         return new DeleteResponseDto(false);
     }
 
+    ////내부 함수들
     private String getUsername(HttpServletRequest request){ // 토큰검사하고 Username 반환
         String token = jwtUtil.resolveToken(request);
         if(jwtUtil.validateToken(token)){

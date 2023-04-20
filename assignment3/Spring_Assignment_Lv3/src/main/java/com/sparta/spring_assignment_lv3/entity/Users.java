@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -23,10 +25,17 @@ public class Users {
     @Column(nullable = false)
     private String email;
 
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comment = new ArrayList<>();
     public Users(RegisterRequestDto registerRequestDto) {
         this.userId = registerRequestDto.getUserid();
         this.password = registerRequestDto.getPassword();
         this.userName = registerRequestDto.getUsername();
         this.email = registerRequestDto.getEmail();
     }
+
+
 }

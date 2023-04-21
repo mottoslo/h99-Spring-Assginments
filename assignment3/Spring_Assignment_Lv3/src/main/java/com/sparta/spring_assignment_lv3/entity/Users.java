@@ -1,6 +1,7 @@
 package com.sparta.spring_assignment_lv3.entity;
 
 import com.sparta.spring_assignment_lv3.dto.RegisterRequestDto;
+import com.sparta.spring_assignment_lv3.enums.userRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,8 @@ public class Users {
     private String userName;
     @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
+    private userRole role = userRole.USER;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
@@ -35,13 +38,11 @@ public class Users {
         this.password = registerRequestDto.getPassword();
         this.userName = registerRequestDto.getUsername();
         this.email = registerRequestDto.getEmail();
+        this.role = registerRequestDto.isIsadmin()?userRole.ADMIN:userRole.USER;
     }
-
-
     public void addArticle(Article article) {
         this.articles.add(article);
     }
-
     public void addComment(Comment comment) {
         this.comment.add(comment);
     }

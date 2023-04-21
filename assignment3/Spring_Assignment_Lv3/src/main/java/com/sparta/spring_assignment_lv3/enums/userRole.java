@@ -1,4 +1,6 @@
 package com.sparta.spring_assignment_lv3.enums;
 
-public class userRole {
+public enum userRole {
+    USER, ADMIN
+
 }

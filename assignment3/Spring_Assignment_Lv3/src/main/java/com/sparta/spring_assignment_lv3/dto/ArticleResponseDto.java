@@ -5,6 +5,7 @@ import com.sparta.spring_assignment_lv3.entity.Article;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class ArticleResponseDto {
                 .stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+        Collections.reverse(this.comments);
 
     }
 

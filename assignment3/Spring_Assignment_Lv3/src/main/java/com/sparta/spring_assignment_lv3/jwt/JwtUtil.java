@@ -1,7 +1,6 @@
 package com.sparta.spring_assignment_lv3.jwt;
 
 
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;

@@ -6,6 +6,7 @@ import com.sparta.spring_assignment_lv3.dto.ArticleResponseDto;
 import com.sparta.spring_assignment_lv3.dto.DeleteResponseDto;
 import com.sparta.spring_assignment_lv3.entity.Article;
 import com.sparta.spring_assignment_lv3.entity.Users;
+import com.sparta.spring_assignment_lv3.enums.userRole;
 import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.ArticleRepository;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
@@ -55,7 +56,7 @@ public class ArticleService {
     @Transactional
     public ArticleResponseDto editArticleById(Long id, ArticleRequestDto requestDto, HttpServletRequest requestToken) {
         Article found = findById(id);
-        if (found.getUser().getUserId().equals(getUsername(requestToken))){
+        if (checkAuth(found, requestToken)){
             found.update(requestDto);
         }
         return new ArticleResponseDto(found);
@@ -63,7 +64,7 @@ public class ArticleService {
     @Transactional
     public DeleteResponseDto deleteArticleById(Long id, HttpServletRequest requestToken) {
         Article found = findById(id);
-        if(found.getUser().getUserId().equals(getUsername(requestToken))) {
+        if(checkAuth(found, requestToken)) {
             articleRepository.deleteById(id);
             return new DeleteResponseDto(true);
         }
@@ -85,5 +86,13 @@ public class ArticleService {
         return userRepository.findByUserId(getUsername(request)).orElseThrow(
                 () -> new IllegalArgumentException("등록된 유저가 없습니다.")
         );
+    }
+
+    private boolean checkAuth(Article found, HttpServletRequest requestToken) {
+        Users user = getUser(requestToken);
+        if(user.getRole() == userRole.ADMIN){
+            return true;
+        }
+        else return found.getUser().getUserId().equals(user.getUserId());
     }
 }

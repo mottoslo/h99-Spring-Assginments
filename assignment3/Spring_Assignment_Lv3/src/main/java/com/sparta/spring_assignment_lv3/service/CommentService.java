@@ -7,6 +7,7 @@ import com.sparta.spring_assignment_lv3.dto.DeleteResponseDto;
 import com.sparta.spring_assignment_lv3.entity.Article;
 import com.sparta.spring_assignment_lv3.entity.Comment;
 import com.sparta.spring_assignment_lv3.entity.Users;
+import com.sparta.spring_assignment_lv3.enums.userRole;
 import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.ArticleRepository;
 import com.sparta.spring_assignment_lv3.repository.CommentRepository;
@@ -42,12 +43,10 @@ public class CommentService {
             CommentEditRequestDto requestDto,
             HttpServletRequest requestToken
     ){
-        Users user = getUser(requestToken);
         Comment comment = getComment(id);
-        if(comment.getUser().getUserId().equals(user.getUserId())){
+        if(checkAuth(comment, requestToken)){
             comment.update(requestDto);
         }
-
         return new CommentResponseDto(comment);
     }
 
@@ -56,9 +55,8 @@ public class CommentService {
             Long id,
             HttpServletRequest requestToken
     ){
-        Users user = getUser(requestToken);
         Comment comment = getComment(id);
-        if(comment.getUser().getUserId().equals(user.getUserId())){
+        if(checkAuth(comment, requestToken)){
             commentRepository.deleteById(id);
             return new DeleteResponseDto(true);
         }
@@ -96,5 +94,13 @@ public class CommentService {
         return commentRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")
         );
+    }
+
+    private boolean checkAuth(Comment comment, HttpServletRequest requestToken){
+        Users user = getUser(requestToken);
+        if (user.getRole() == userRole.ADMIN){
+            return true;
+        }
+        else return user.getUserId().equals(comment.getUser().getUserId());
     }
 }

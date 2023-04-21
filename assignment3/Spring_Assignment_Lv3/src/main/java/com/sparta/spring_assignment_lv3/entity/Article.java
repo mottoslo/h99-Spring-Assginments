@@ -45,8 +45,4 @@ public class Article extends Timestamped {
     public void addComment(Comment comment) {
         this.comment.add(comment);
     }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
 }

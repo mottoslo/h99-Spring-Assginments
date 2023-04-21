@@ -25,10 +25,10 @@ public class Users {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Article> articles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comment = new ArrayList<>();
     public Users(RegisterRequestDto registerRequestDto) {
         this.userId = registerRequestDto.getUserid();
@@ -38,4 +38,11 @@ public class Users {
     }
 
 
+    public void addArticle(Article article) {
+        this.articles.add(article);
+    }
+
+    public void addComment(Comment comment) {
+        this.comment.add(comment);
+    }
 }

@@ -24,7 +24,7 @@ public class ArticleService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Article findById(Long id){
         return articleRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("게시글을 찾을 수 없습니다.")
@@ -41,12 +41,13 @@ public class ArticleService {
     @Transactional
     public ArticleResponseDto postArticle(ArticleRequestDto requestDto, HttpServletRequest requestToken) {
         Users user = getUser(requestToken);
-        Article new_article = new Article(requestDto, user);
-        articleRepository.save(new_article);
-        return new ArticleResponseDto(new_article);
+        Article article = new Article(requestDto, user);
+        articleRepository.save(article);
+        user.addArticle(article);
+        return new ArticleResponseDto(article);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public ArticleResponseDto getArticleById(Long id) {
         Article found = findById(id);
         return new ArticleResponseDto(found);

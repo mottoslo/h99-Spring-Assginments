@@ -2,6 +2,7 @@ package com.sparta.spring_assignment_lv3.service;
 
 import com.sparta.spring_assignment_lv3.dto.LoginRequestDto;
 import com.sparta.spring_assignment_lv3.dto.RegisterRequestDto;
+import com.sparta.spring_assignment_lv3.entity.Comment;
 import com.sparta.spring_assignment_lv3.entity.Users;
 import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +38,15 @@ public class UserService {
         if(getIdExists(registerRequestDto.getUserid())){
             return "이미 사용중인 ID입니다";
         }
-        else{
+        else {
             userRepository.save(new Users(registerRequestDto));
             return "회원가입에 성공하였습니다";
         }
     }
 
+    public List<Comment> testing(Users user){
+        return user.getComment();
+    }
     private boolean checkIdPolicy(String id){return id.matches("^[a-z0-9]{4,10}$");}
     private boolean checkPwPolicy(String id){return id.matches("^[a-zA-Z0-9]{10,15}$");}
     private void checkRegisterRequest(RegisterRequestDto registerRequestDto){

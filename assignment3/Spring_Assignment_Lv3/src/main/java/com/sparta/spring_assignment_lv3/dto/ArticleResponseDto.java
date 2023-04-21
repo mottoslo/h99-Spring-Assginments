@@ -5,6 +5,8 @@ import com.sparta.spring_assignment_lv3.entity.Article;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class ArticleResponseDto {
@@ -14,6 +16,7 @@ public class ArticleResponseDto {
     private final String title;
     private final String author;
     private final String content;
+    private final List<CommentResponseDto> comments;
 
     public ArticleResponseDto(Article article) {   //한번에 안되나 ?
         this.createdAt = article.getCreatedAt();
@@ -22,6 +25,11 @@ public class ArticleResponseDto {
         this.title = article.getTitle();
         this.author = article.getUser().getUserId();
         this.content = article.getContent();
+        this.comments = article.getComment()
+                .stream()
+                .map(CommentResponseDto::new)
+                .collect(Collectors.toList());
+
     }
 
 }

@@ -29,6 +29,8 @@ public class Comment extends Timestamped {
         this.content = requestDto.getContent();
         this.user = user;
         this.article = article;
+        user.addComment(this);
+        article.addComment(this);
     }
 
     public void update(CommentEditRequestDto requestDto){

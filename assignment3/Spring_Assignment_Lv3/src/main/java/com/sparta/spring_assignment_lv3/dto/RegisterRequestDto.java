@@ -15,5 +15,4 @@ public class RegisterRequestDto {
         this.username = username;
         this.email = email;
     }
-
 }

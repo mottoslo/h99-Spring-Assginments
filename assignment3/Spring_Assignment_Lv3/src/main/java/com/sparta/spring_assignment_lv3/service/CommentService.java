@@ -13,6 +13,7 @@ import com.sparta.spring_assignment_lv3.repository.CommentRepository;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,15 +24,19 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
+
+    @Transactional
     public CommentResponseDto postComment(CommentPostRequestDto requestDto, HttpServletRequest requestToken){
         Users user = getUser(requestToken);
         Article article = getArticle(requestDto.getPostId());
         Comment comment = new Comment(requestDto, user, article);
         commentRepository.save(comment);
+        article.addComment(comment);    // article에 Comment추가해주고, Comment에도 Article 추가
+        user.addComment(comment);
 
         return new CommentResponseDto(comment);
     }
-
+    @Transactional
     public CommentResponseDto editComment(
             Long id,
             CommentEditRequestDto requestDto,
@@ -46,6 +51,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    @Transactional
     public DeleteResponseDto deleteComment(
             Long id,
             HttpServletRequest requestToken
@@ -62,9 +68,8 @@ public class CommentService {
 
     }
 
-
-
     ///내부메소드들
+
     private Article getArticle(Long postId) {
         return articleRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("Article Not found")

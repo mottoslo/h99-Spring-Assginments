@@ -3,12 +3,16 @@ package com.sparta.spring_assignment_lv3.service;
 import com.sparta.spring_assignment_lv3.dto.LoginRequestDto;
 import com.sparta.spring_assignment_lv3.dto.RegisterRequestDto;
 import com.sparta.spring_assignment_lv3.entity.Users;
-import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
+import com.sparta.spring_assignment_lv3.utils.Exceptions.MyException;
+import com.sparta.spring_assignment_lv3.utils.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,23 +21,24 @@ public class UserService {
     private final JwtUtil jwtUtil;
     private final String adminKey = "admintest";
 
-    public String verifyUser(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public HttpHeaders verifyUser(LoginRequestDto loginRequestDto){
 
-            Users user = userRepository.findByUserIdAndPassword(
-                    loginRequestDto.getUserid(),
-                    loginRequestDto.getPassword()
-            ).orElseThrow(
-                    () -> new IllegalArgumentException("id나 pw가 일치하지 않습니다.")
-            );
+        Users user = userRepository.findByUserIdAndPassword(
+                loginRequestDto.getUserid(),
+                loginRequestDto.getPassword()
+        ).orElseThrow(
+                () -> new NullPointerException("유저를 찾을 수 없습니다.")
+        );
 
         String token = jwtUtil.createToken(user.getUserId());
-        response.addHeader(jwtUtil.AUTHORIZATION_HEADER, token);
-        return "로그인 성공 !";
+        HttpHeaders header = new HttpHeaders();
+        header.add(jwtUtil.AUTHORIZATION_HEADER, token);
+        return header;
     }
 
     public String register(RegisterRequestDto registerRequestDto) {
-        try{checkRegisterRequest(registerRequestDto);}
-        catch(Exception e){return e.getMessage();}
+
+        checkRegisterRequest(registerRequestDto);
 
         userRepository.save(new Users(registerRequestDto));
         return "회원가입에 성공하였습니다";
@@ -45,7 +50,7 @@ public class UserService {
     private boolean getIdExists(String userid) { return userRepository.existsByUserId(userid);}
     private void checkRegisterRequest(RegisterRequestDto requestDto){
         if(!checkIdPolicy(requestDto.getUserid())){
-            throw new IllegalArgumentException("Id 형식이 올바르지 않습니다");
+            throw new IllegalArgumentException("Id 형식이 올바르지 않습니다.");
         }
         if(!checkPwPolicy(requestDto.getPassword())){
             throw new IllegalArgumentException("Pw 형식이 올바르지 않습니다");

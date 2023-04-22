@@ -1,4 +1,4 @@
-package com.sparta.spring_assignment_lv3.jwt;
+package com.sparta.spring_assignment_lv3.utils.jwt;
 
 
 import io.jsonwebtoken.*;

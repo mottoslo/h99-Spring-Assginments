@@ -2,12 +2,10 @@ package com.sparta.spring_assignment_lv3.entity;
 
 
 import com.sparta.spring_assignment_lv3.dto.ArticleRequestDto;
-
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class Article extends Timestamped {
     private Users user;            //Article 가져올 때 Users도 같이 가져와야하는데 효율적인가 ? 다른방법 ?
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)  // Article이 삭제되면 Comment도 삭제
-    List<Comment> comment = new ArrayList<>();
+    private final List<Comment> comment = new ArrayList<>();
 
 
     public Article(ArticleRequestDto requestDto, Users user) {

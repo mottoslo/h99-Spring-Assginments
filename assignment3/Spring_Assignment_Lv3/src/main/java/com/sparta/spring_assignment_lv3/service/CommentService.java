@@ -8,7 +8,7 @@ import com.sparta.spring_assignment_lv3.entity.Article;
 import com.sparta.spring_assignment_lv3.entity.Comment;
 import com.sparta.spring_assignment_lv3.entity.Users;
 import com.sparta.spring_assignment_lv3.enums.userRole;
-import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
+import com.sparta.spring_assignment_lv3.utils.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.ArticleRepository;
 import com.sparta.spring_assignment_lv3.repository.CommentRepository;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
@@ -70,7 +70,7 @@ public class CommentService {
 
     private Article getArticle(Long postId) {
         return articleRepository.findById(postId).orElseThrow(
-                () -> new NullPointerException("Article Not found")
+                () -> new NullPointerException("게시글을 찾을 수 없습니다.")
         );
     }
 
@@ -86,13 +86,13 @@ public class CommentService {
 
     private Users getUser(HttpServletRequest request){
         return userRepository.findByUserId(getUsername(request)).orElseThrow(
-                () -> new IllegalArgumentException("등록된 유저가 없습니다.")
+                () -> new NullPointerException("유저를 찾을 수 없습니다.")
         );
     }
 
     private Comment getComment(Long id){
         return commentRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")
+                () -> new NullPointerException("댓글을 찾을 수 없습니다.")
         );
     }
 

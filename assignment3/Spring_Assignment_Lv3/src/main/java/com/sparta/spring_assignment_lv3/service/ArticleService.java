@@ -7,7 +7,7 @@ import com.sparta.spring_assignment_lv3.dto.DeleteResponseDto;
 import com.sparta.spring_assignment_lv3.entity.Article;
 import com.sparta.spring_assignment_lv3.entity.Users;
 import com.sparta.spring_assignment_lv3.enums.userRole;
-import com.sparta.spring_assignment_lv3.jwt.JwtUtil;
+import com.sparta.spring_assignment_lv3.utils.jwt.JwtUtil;
 import com.sparta.spring_assignment_lv3.repository.ArticleRepository;
 import com.sparta.spring_assignment_lv3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -37,6 +37,7 @@ public class CommentService {
 
         return new CommentResponseDto(comment);
     }
+
     @Transactional
     public CommentResponseDto editComment(
             Long id,

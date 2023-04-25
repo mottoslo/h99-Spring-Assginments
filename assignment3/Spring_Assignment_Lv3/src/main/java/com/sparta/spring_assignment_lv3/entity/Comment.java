@@ -25,6 +25,8 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "article_id")
     private Article article;
 
+
+
     public Comment(CommentPostRequestDto requestDto, Users user, Article article) {
         this.content = requestDto.getContent();
         this.user = user;

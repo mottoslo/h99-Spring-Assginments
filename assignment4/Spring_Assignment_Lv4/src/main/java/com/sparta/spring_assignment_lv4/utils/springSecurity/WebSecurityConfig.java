@@ -1,20 +1,35 @@
 package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
 
-import com.sparta.spring_assignment_lv4.Repository.UserRepository;
+import com.sparta.spring_assignment_lv4.repository.UserRepository;
+import com.sparta.spring_assignment_lv4.utils.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
-public class WebSecurityConfig {
+//@EnableGlobalMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
+public class WebSecurityConfig{
+    private final IdPwAuthenticationManager idPwAuthenticationManager;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -36,13 +51,17 @@ public class WebSecurityConfig {
 //                .antMatchers("/js/**").permitAll()
 //                .antMatchers("/images/**").permitAll()
 //                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .antMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                        .authenticationManager(idPwAuthenticationManager);
+//                .addFilterBefore(idPwAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 로그인 사용
-        http.formLogin().loginPage("/api/user/login").permitAll();
+        http.formLogin().loginPage("/api/user/login-page").permitAll();
+        http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
+
+
         return http.build();
     }
-
 }

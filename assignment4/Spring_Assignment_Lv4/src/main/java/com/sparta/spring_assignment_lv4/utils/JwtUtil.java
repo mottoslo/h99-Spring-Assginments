@@ -2,6 +2,7 @@ package com.sparta.spring_assignment_lv4.utils;
 
 
 import com.sparta.spring_assignment_lv4.enums.Role;
+import com.sparta.spring_assignment_lv4.utils.springSecurity.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -51,13 +54,13 @@ public class JwtUtil {
     }
     // 토큰 생성
 
-    public String createToken(String username, Role role) {
+    public String createToken(UserDetailsImpl userDetails) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
+                        .setSubject(userDetails.getUsername())
+//                        .claim(AUTHORIZATION_KEY, auth.getAuthorities())
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)

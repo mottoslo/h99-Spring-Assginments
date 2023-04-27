@@ -2,15 +2,12 @@ package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.enums.Role;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 
 public class UserDetailsImpl implements UserDetails {
@@ -35,7 +32,8 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        System.out.println("user.getPassword() = " + user.getPassword());
+        return user.getPassword();
     }
 
     @Override
@@ -45,21 +43,19 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
+    public boolean isCredentialsNonExpired() { return true; }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

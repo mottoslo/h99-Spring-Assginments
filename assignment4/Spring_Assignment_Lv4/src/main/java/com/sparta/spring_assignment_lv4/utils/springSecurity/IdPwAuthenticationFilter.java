@@ -1,7 +1,5 @@
 package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
-import com.sparta.spring_assignment_lv4.utils.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;

@@ -2,29 +2,23 @@ package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
 
 import com.sparta.spring_assignment_lv4.repository.UserRepository;
-import com.sparta.spring_assignment_lv4.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig{
-    private final IdPwAuthenticationManager idPwAuthenticationManager;
+    private final UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,6 +31,10 @@ public class WebSecurityConfig{
         return (web) -> web.ignoring()
                 .requestMatchers(PathRequest.toH2Console())
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
+    @Bean
+    UserDetailsServiceImpl userDetailsServiceimpl(){
+        return new UserDetailsServiceImpl(userRepository);
     }
 
     @Bean
@@ -52,16 +50,17 @@ public class WebSecurityConfig{
 //                .antMatchers("/images/**").permitAll()
 //                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/api/user/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                        .authenticationManager(idPwAuthenticationManager);
+                .anyRequest().authenticated();
+//                .and()
+
 //                .addFilterBefore(idPwAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 로그인 사용
         http.formLogin().loginPage("/api/user/login-page").permitAll();
+        http.formLogin().loginProcessingUrl("/api/user/login");
+
+//        http.formLogin().permitAll();
         http.exceptionHandling().accessDeniedPage("/api/user/forbidden");
-
-
         return http.build();
     }
 }

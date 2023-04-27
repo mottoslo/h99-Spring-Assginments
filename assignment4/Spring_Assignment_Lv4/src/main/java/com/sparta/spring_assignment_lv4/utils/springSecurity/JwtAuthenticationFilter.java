@@ -2,9 +2,6 @@ package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
 import com.sparta.spring_assignment_lv4.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;

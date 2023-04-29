@@ -20,14 +20,12 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final String ADMIN_TOKEN = "admin123";
 
     @Transactional
     public void signupRequest(SignupRequestDto requestDto) {
-        User new_user;
         if (userRepository.existsByUserId(requestDto.getUsername())) {
             throw new UserIdExistsException("이미 존재하는 ID입니다");
         } else if(requestDto.isAdmin()){
@@ -35,15 +33,11 @@ public class UserService {
                 throw new AdminTokenInvalidException("AdminToken 값이 올바르지 않습니다.");
             }
         }
-
-        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        new_user = new User(requestDto);
+        User new_user;
+        new_user = requestDto.toUser(passwordEncoder);
         userRepository.save(new_user);
     }
 
-//    @Transactional
-//    public void loginRequest(UserDetailsImpl userDetails, HttpServletResponse response) {
-//        String token = jwtUtil.createToken(userDetails);
-//        response.addHeader(jwtUtil.AUTHORIZATION_HEADER,token);
-//    }
+
+
 }

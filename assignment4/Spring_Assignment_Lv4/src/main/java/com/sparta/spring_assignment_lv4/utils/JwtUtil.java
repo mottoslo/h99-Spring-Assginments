@@ -29,7 +29,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static final String AUTHORIZATION_KEY = "auth";
-    private static final String BEARER_PREFIX = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer ";
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
 
     @Value("${jwt.secret.key}")
@@ -54,12 +54,12 @@ public class JwtUtil {
     }
     // 토큰 생성
 
-    public String createToken(UserDetailsImpl userDetails) {
+    public String createToken(String username) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(userDetails.getUsername())
+                        .setSubject(username)
 //                        .claim(AUTHORIZATION_KEY, auth.getAuthorities())
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)

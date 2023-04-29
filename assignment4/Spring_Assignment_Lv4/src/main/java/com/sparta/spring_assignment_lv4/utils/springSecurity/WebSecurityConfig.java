@@ -2,6 +2,7 @@ package com.sparta.spring_assignment_lv4.utils.springSecurity;
 
 
 import com.sparta.spring_assignment_lv4.repository.UserRepository;
+import com.sparta.spring_assignment_lv4.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity // 스프링 Security 지원을 가능하게 함
+@EnableWebSecurity // (debug = true) // 스프링 Security 지원을 가능하게 함
 //@EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class WebSecurityConfig{
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,7 +58,9 @@ public class WebSecurityConfig{
 //                .addFilterBefore(idPwAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         // 로그인 사용
-        http.formLogin().loginPage("/api/user/login-page").permitAll();
+        http.formLogin().loginPage("/api/user/login-page")
+                .successHandler(new LoginSuccessHandler(jwtUtil))
+                .permitAll();
         http.formLogin().loginProcessingUrl("/api/user/login");
 
 //        http.formLogin().permitAll();

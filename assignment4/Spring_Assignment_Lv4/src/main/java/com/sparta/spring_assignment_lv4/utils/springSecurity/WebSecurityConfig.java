@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity // (debug = true) // 스프링 Security 지원을 가능하게 함
@@ -43,6 +45,8 @@ public class WebSecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // CSRF 설정
         http.csrf().disable();
+        //세션 사용 안함
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
 //                .antMatchers(HttpMethod.GET, "/api/article").permitAll()
@@ -52,10 +56,9 @@ public class WebSecurityConfig{
 //                .antMatchers("/images/**").permitAll()
 //                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/api/user/**").permitAll()
-                .anyRequest().authenticated();
-//                .and()
-
-//                .addFilterBefore(idPwAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsServiceimpl()), UsernamePasswordAuthenticationFilter.class);
 
         // 로그인 사용
         http.formLogin().loginPage("/api/user/login-page")

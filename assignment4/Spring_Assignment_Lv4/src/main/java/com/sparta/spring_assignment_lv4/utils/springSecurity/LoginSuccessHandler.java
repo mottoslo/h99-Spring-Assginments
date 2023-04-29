@@ -21,6 +21,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = jwtUtil.createToken(authentication.getName());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-        defaultHandler.onAuthenticationSuccess(request, response, authentication);
+//        System.out.println(response.isCommitted());
+//        defaultHandler.onAuthenticationSuccess(request, response, authentication);  // 리디렉션 어케 처리할건지 고민해보자
+
+
     }
 }

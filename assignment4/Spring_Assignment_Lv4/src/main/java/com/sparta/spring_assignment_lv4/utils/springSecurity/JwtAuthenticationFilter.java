@@ -3,11 +3,13 @@ package com.sparta.spring_assignment_lv4.utils.springSecurity;
 import com.sparta.spring_assignment_lv4.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
@@ -32,10 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //인증로직 시작
         String token = jwtUtil.resolveToken(request);  // 접두사 빼고 token만 가져오기
         if(!jwtUtil.validateToken(token)){ // Exception은 JwtUtil에 구현
+            System.out.println("reslove안됨");
             filterChain.doFilter(request, response);
             return;
         }
-
         setAuthenticationContext(token);
         filterChain.doFilter(request, response);
     }
@@ -43,9 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private void setAuthenticationContext(String token) {
         UserDetailsImpl userDetails = getUserDetail(token);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(), null, userDetails.getAuthorities()
+                userDetails, null, userDetails.getAuthorities()
         );
-
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
@@ -64,5 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         else return true;
     }
 }
+
 
 

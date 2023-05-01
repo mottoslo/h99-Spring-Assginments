@@ -34,10 +34,7 @@ public class UserController {
 
     @PostMapping(value = "/signup")
     public String signupRequest(SignupRequestDto requestDto){
-        System.out.println("requestDto.getUsername() = " + requestDto.getUsername());
-        System.out.println("requestDto.getPassword() = " + requestDto.getPassword());
         userService.signupRequest(requestDto);
-
         return "redirect:/api/user/login-page";
 
     }

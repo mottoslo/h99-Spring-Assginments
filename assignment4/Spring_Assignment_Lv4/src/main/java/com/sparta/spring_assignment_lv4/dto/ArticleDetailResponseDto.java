@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -15,8 +16,9 @@ public class ArticleDetailResponseDto {
     private final String userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
+    private List<CommentResponseDto> comments;
 
-    public ArticleDetailResponseDto(Article article) {
+    public ArticleDetailResponseDto(Article article, List<CommentResponseDto> comments) {
         this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();

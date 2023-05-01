@@ -6,6 +6,7 @@ import com.sparta.spring_assignment_lv4.dto.ArticleListResponseDto;
 import com.sparta.spring_assignment_lv4.dto.ArticlePostRequestDto;
 import com.sparta.spring_assignment_lv4.service.ArticleService;
 import com.sparta.spring_assignment_lv4.utils.springSecurity.UserDetailsImpl;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,6 @@ public class ArticleController {
 
     @GetMapping
     public List<ArticleListResponseDto> getArticleList(){
-        System.out.println("articleService.getArticleList().size() = " + articleService.getArticleList().size());
         return articleService.getArticleList();
     }
 
@@ -30,6 +30,11 @@ public class ArticleController {
             @RequestBody ArticlePostRequestDto requestDto
     ){
         return articleService.postArticle(userDetails.getUser(), requestDto);
+    }
+
+    @GetMapping("/{id}")
+    public ArticleDetailResponseDto getArticleById(@PathVariable Long id){
+        return articleService.getArticleById(id);
     }
 
 

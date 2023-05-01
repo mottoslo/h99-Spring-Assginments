@@ -1,14 +1,15 @@
 package com.sparta.spring_assignment_lv4.service;
 
 
-import com.sparta.spring_assignment_lv4.dto.ArticleDetailResponseDto;
-import com.sparta.spring_assignment_lv4.dto.ArticleListResponseDto;
-import com.sparta.spring_assignment_lv4.dto.ArticlePostRequestDto;
+import com.sparta.spring_assignment_lv4.dto.*;
 import com.sparta.spring_assignment_lv4.entity.Article;
 import com.sparta.spring_assignment_lv4.entity.User;
+import com.sparta.spring_assignment_lv4.enums.Role;
 import com.sparta.spring_assignment_lv4.repository.ArticleRepository;
-import com.sparta.spring_assignment_lv4.repository.UserRepository;
+import com.sparta.spring_assignment_lv4.repository.CommentRepository;
+import com.sparta.spring_assignment_lv4.utils.Exceptions.ArticleDeletedException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.ArticleNotFoundException;
+import com.sparta.spring_assignment_lv4.utils.Exceptions.UnAuthorizedRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public ArticleDetailResponseDto postArticle(User user, ArticlePostRequestDto requestDto) {
@@ -29,19 +30,58 @@ public class ArticleService {
         return new ArticleDetailResponseDto(new_article);
     }
     @Transactional
-    public List<ArticleListResponseDto> getArticleList() {
-        return articleRepository.findAll()
-                .stream()
-                .map(ArticleListResponseDto::new)
-                .collect(Collectors.toList());
+        public List<ArticleListResponseDto> getArticleList() {
+            return articleRepository.findAllByIsDeletedFalse()
+                    .stream()
+                    .map(ArticleListResponseDto::new)
+                    .collect(Collectors.toList());
     }
 
-    public ArticleDetailResponseDto getArticleById(Long id) {
-    Article article = articleRepository.findById(id).orElseThrow(
-            () -> new ArticleNotFoundException("게시글을 찾을 수 없습니다")
-    );
-    return new ArticleDetailResponseDto(article);
+    @Transactional
+    public ArticleDetailResponseDto getArticleById(Long articleId) {
+    Article article = loadArticle(articleId);
+    if (article.getIsDeleted()) throw new ArticleDeletedException("삭제된 게시글입니다");
+    List<CommentResponseDto> comments =
+            commentRepository.findByRootArticleId(articleId)
+                    .stream()
+                    .map(CommentResponseDto::new)
+                    .collect(Collectors.toList());
+
+    return new ArticleDetailResponseDto(article, comments);
+    }
+
+    @Transactional
+    public ArticleDetailResponseDto editArticle(User user, Long articleId, ArticleEditRequestDto requestDto) {
+        Article article = loadArticle(articleId);
+        checkArticleModifyAuthorization(user,article);
+        article.updateContent(requestDto.getContent());
+
+        return new ArticleDetailResponseDto(article);
+    }
+
+    @Transactional
+    public void deleteArticle(User user, Long articleId) {
+        Article article = loadArticle(articleId);
+        checkArticleModifyAuthorization(user, article);
+        article.flagDeleted();
     }
 
 
+    ///////////////내부코드들//////////////////////////
+
+    private Article loadArticle(Long articleId){
+        return articleRepository.findById(articleId).orElseThrow(
+                () -> new ArticleNotFoundException("게시글을 찾을 수 없습니다")
+        );
+    }
+
+    private void checkArticleModifyAuthorization(User user, Article article){
+        if(!(user.getRole().equals(Role.ROLE_ADMIN) || articleOwnerValidation(user, article))){
+            throw new UnAuthorizedRequestException("요청에 대한 권한이 없습니다");
+        }
+    }
+
+    private boolean articleOwnerValidation(User user, Article article){
+        return user.getId().equals(article.getUser().getId());
+    }
 }

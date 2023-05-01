@@ -24,7 +24,10 @@ public class Article{
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    User user;
+    private User user;
+
+    @Column
+    private Boolean isDeleted = false;
 
     @CreatedDate
     private LocalDateTime CreatedAt;
@@ -37,4 +40,10 @@ public class Article{
         this.title = title;
         this.user = user;
     }
+
+    public void updateContent(String content){
+        this.content = content;
+    }
+    public void flagDeleted(){ this.isDeleted = true; }
+
 }

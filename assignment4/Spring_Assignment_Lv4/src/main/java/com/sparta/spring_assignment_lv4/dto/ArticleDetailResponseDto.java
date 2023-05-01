@@ -16,7 +16,7 @@ public class ArticleDetailResponseDto {
     private final String userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
-    private List<CommentResponseDto> comments;
+    private final List<CommentResponseDto> comments;
 
     public ArticleDetailResponseDto(Article article, List<CommentResponseDto> comments) {
         this.id = article.getId();
@@ -25,5 +25,16 @@ public class ArticleDetailResponseDto {
         this.userId = article.getUser().getUserId();
         this.createdAt = article.getCreatedAt();
         this.modifiedAt = article.getModifiedAt();
+        this.comments = comments;
+    }
+
+    public ArticleDetailResponseDto(Article article) {
+        this.id = article.getId();
+        this.title = article.getTitle();
+        this.content = article.getContent();
+        this.userId = article.getUser().getUserId();
+        this.createdAt = article.getCreatedAt();
+        this.modifiedAt = article.getModifiedAt();
+        this.comments = null;
     }
 }

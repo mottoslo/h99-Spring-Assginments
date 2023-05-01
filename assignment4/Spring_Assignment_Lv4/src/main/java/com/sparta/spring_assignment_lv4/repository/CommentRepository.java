@@ -1,6 +1,5 @@
 package com.sparta.spring_assignment_lv4.repository;
 
-import com.sparta.spring_assignment_lv4.entity.Article;
 import com.sparta.spring_assignment_lv4.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 

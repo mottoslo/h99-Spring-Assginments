@@ -7,7 +7,6 @@ import com.sparta.spring_assignment_lv4.entity.Comment;
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.enums.Role;
 import com.sparta.spring_assignment_lv4.repository.CommentRepository;
-import com.sparta.spring_assignment_lv4.utils.Exceptions.CommentDeletedException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.CommentNotFoundException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.UnAuthorizedRequestException;
 import lombok.RequiredArgsConstructor;

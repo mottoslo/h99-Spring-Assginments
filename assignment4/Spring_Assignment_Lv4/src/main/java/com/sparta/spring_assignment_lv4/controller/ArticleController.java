@@ -8,7 +8,6 @@ import com.sparta.spring_assignment_lv4.dto.ArticlePostRequestDto;
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.service.ArticleService;
 import com.sparta.spring_assignment_lv4.utils.springSecurity.UserDetailsImpl;
-import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

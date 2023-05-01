@@ -2,7 +2,6 @@ package com.sparta.spring_assignment_lv4.dto;
 
 import com.sparta.spring_assignment_lv4.entity.Article;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;

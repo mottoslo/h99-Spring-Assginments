@@ -1,6 +1,5 @@
 package com.sparta.spring_assignment_lv4.dto;
 
-import com.sparta.spring_assignment_lv4.entity.Article;
 import com.sparta.spring_assignment_lv4.entity.Comment;
 import com.sparta.spring_assignment_lv4.entity.User;
 import lombok.Getter;

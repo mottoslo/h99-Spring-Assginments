@@ -1,13 +1,11 @@
 package com.sparta.spring_assignment_lv4.entity;
 
-import com.sparta.spring_assignment_lv4.dto.ArticlePostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Entity

@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //인증로직 시작
         String token = jwtUtil.resolveToken(request);  // 접두사 빼고 token만 가져오기
         if(!jwtUtil.validateToken(token)){ // Exception은 JwtUtil에 구현
-            System.out.println("reslove안됨");
             filterChain.doFilter(request, response);
             return;
         }

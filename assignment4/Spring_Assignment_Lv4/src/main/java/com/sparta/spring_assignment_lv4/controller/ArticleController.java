@@ -57,6 +57,24 @@ public class ArticleController {
         articleService.deleteArticle(user, articleId);
     }
 
+    @PostMapping("/like/{articleId}")
+    public void likeArticle(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long articleId
+    ){
+        Long userId = userDetails.getUser().getId();
+        articleService.likeArticle(userId, articleId);
+    }
+
+    @DeleteMapping("like/{articleId}")
+    public void likeCancelArticle(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long articleId
+    ){
+        Long userId = userDetails.getUser().getId();
+        articleService.likeCancelArticle(userId, articleId);
+    }
+
 
 
 }

@@ -36,6 +36,5 @@ public class UserController {
     public String signupRequest(SignupRequestDto requestDto){
         userService.signupRequest(requestDto);
         return "redirect:/api/user/login-page";
-
     }
 }

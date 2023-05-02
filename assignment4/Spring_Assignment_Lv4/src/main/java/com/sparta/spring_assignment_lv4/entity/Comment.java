@@ -22,15 +22,8 @@ public class Comment{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "article_id")
-//    private Article rootArticle;
 
-//    @Column
-//    private Long userId;
-
-    @Column
+    @Column(nullable = false)
     private Long rootArticleId;
 
     @Column
@@ -39,8 +32,11 @@ public class Comment{
     @Column
     private Boolean isDeleted = false;
 
+    @Column
+    private Integer numLikes = 0;
+
     @CreatedDate
-    private LocalDateTime CreatedAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime modifiedAt;
@@ -61,4 +57,8 @@ public class Comment{
     public void updateContent(String content){ this.content = content; }
 
     public void flagDeleted(){ this.isDeleted = true; }
+
+    public void addLike() { this.numLikes++; }
+
+    public void cancelLike() { this.numLikes--; }
 }

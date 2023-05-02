@@ -4,10 +4,13 @@ import com.sparta.spring_assignment_lv4.dto.CommentEditRequestDto;
 import com.sparta.spring_assignment_lv4.dto.CommentPostRequestDto;
 import com.sparta.spring_assignment_lv4.dto.CommentResponseDto;
 import com.sparta.spring_assignment_lv4.entity.Comment;
+import com.sparta.spring_assignment_lv4.entity.CommentLikes;
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.enums.Role;
+import com.sparta.spring_assignment_lv4.repository.CommentLikesRepository;
 import com.sparta.spring_assignment_lv4.repository.CommentRepository;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.CommentNotFoundException;
+import com.sparta.spring_assignment_lv4.utils.Exceptions.DuplicateLikeRequestException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.UnAuthorizedRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final CommentLikesRepository commentLikesRepository;
+
     @Transactional
     public CommentResponseDto commentOnArticle(User user, CommentPostRequestDto requestDto, Long articleId) {
         Comment comment = requestDto.toComment(user, articleId);
@@ -44,6 +49,24 @@ public class CommentService {
         Comment comment = loadComment(commentId);
         checkCommentModifyAuthorization(user, comment);
         comment.flagDeleted();
+    }
+    @Transactional
+    public void likeComment(Long userId, Long commentId) {
+        Comment comment = loadComment(commentId);
+        if(commentLikesRepository.existsByCommentIdAndUserId(commentId, userId)){
+            throw new DuplicateLikeRequestException("한 번만 추천할 수 있습니다");
+        }
+        CommentLikes like = new CommentLikes(commentId, userId);
+        commentLikesRepository.save(like);
+        comment.addLike();
+    }
+    @Transactional
+    public void likeCancelComment(Long userId, Long commentId){
+        Comment comment = loadComment(commentId);
+        if(commentLikesRepository.existsByCommentIdAndUserId(commentId, userId)){
+            commentLikesRepository.deleteByCommentIdAndUserId(commentId, userId);
+            comment.cancelLike();
+        }
     }
 
 

@@ -3,12 +3,15 @@ package com.sparta.spring_assignment_lv4.service;
 
 import com.sparta.spring_assignment_lv4.dto.*;
 import com.sparta.spring_assignment_lv4.entity.Article;
+import com.sparta.spring_assignment_lv4.entity.ArticleLikes;
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.enums.Role;
+import com.sparta.spring_assignment_lv4.repository.ArticleLikesRepository;
 import com.sparta.spring_assignment_lv4.repository.ArticleRepository;
 import com.sparta.spring_assignment_lv4.repository.CommentRepository;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.ArticleDeletedException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.ArticleNotFoundException;
+import com.sparta.spring_assignment_lv4.utils.Exceptions.DuplicateLikeRequestException;
 import com.sparta.spring_assignment_lv4.utils.Exceptions.UnAuthorizedRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final CommentRepository commentRepository;
+    private final ArticleLikesRepository articleLikesRepository;
 
     @Transactional
     public ArticleDetailResponseDto postArticle(User user, ArticlePostRequestDto requestDto) {
@@ -64,6 +68,24 @@ public class ArticleService {
         Article article = loadArticle(articleId);
         checkArticleModifyAuthorization(user, article);
         article.flagDeleted();
+    }
+    @Transactional
+    public void likeArticle(Long userId, Long articleId) {
+        Article article = loadArticle(articleId);
+        if(articleLikesRepository.existsByArticleIdAndUserId(articleId, userId)){
+            throw new DuplicateLikeRequestException("한 번만 추천할 수 있습니다");
+        }
+        ArticleLikes like = new ArticleLikes(articleId, userId);
+        articleLikesRepository.save(like);
+        article.addLike();
+    }
+    @Transactional
+    public void likeCancelArticle(Long userId, Long articleId){
+        Article article = loadArticle(articleId);
+        if(articleLikesRepository.existsByArticleIdAndUserId(articleId,userId)){
+            articleLikesRepository.deleteByArticleIdAndUserId(articleId, userId);
+            article.cancelLike();
+        }
     }
 
 

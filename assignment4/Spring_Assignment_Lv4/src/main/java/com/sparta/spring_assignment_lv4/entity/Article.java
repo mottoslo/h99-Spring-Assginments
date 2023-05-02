@@ -27,6 +27,9 @@ public class Article{
     @Column
     private Boolean isDeleted = false;
 
+    @Column
+    private Integer numLikes = 0;
+
     @CreatedDate
     private LocalDateTime CreatedAt;
 
@@ -44,4 +47,6 @@ public class Article{
     }
     public void flagDeleted(){ this.isDeleted = true; }
 
+    public void addLike() { this.numLikes++; }
+    public void cancelLike() { this.numLikes--; }
 }

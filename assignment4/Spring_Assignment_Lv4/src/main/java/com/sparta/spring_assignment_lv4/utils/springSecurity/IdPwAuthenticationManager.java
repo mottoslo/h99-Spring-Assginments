@@ -15,7 +15,6 @@ public class IdPwAuthenticationManager implements AuthenticationManager{
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("내 authenticationManager");
         UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(authentication.getPrincipal().toString());
         Authentication new_token;
         if(authentication.getCredentials().equals(userDetails.getPassword())){

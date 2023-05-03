@@ -14,7 +14,7 @@ public class CommentResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
     private final Integer numLikes;
-    private Boolean thisUserLiked;
+    private final Boolean thisUserLiked;
 
     public CommentResponseDto(
             Long id,

@@ -1,5 +1,6 @@
 package com.sparta.spring_assignment_lv4.entity;
 
+import com.sparta.spring_assignment_lv4.dto.CommentResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter

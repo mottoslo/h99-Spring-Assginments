@@ -1,5 +1,7 @@
 package com.sparta.spring_assignment_lv4.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.sparta.spring_assignment_lv4.entity.Comment;
 import lombok.Getter;
 
@@ -15,13 +17,39 @@ public class CommentResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
     private final Integer numLikes;
-    public CommentResponseDto(Comment comment) {
-        this.id = comment.getId();
-        this.content = comment.getIsDeleted()? "삭제된 댓글입니다" : comment.getContent();
-        this.author = comment.getUser().getUserId();
-        this.createdAt = comment.getCreatedAt();
-        this.modifiedAt = comment.getModifiedAt();
-        this.numLikes = comment.getNumLikes();
+    private final Boolean thisUserLiked;
 
+    @QueryProjection
+    public CommentResponseDto(
+            Long id,
+            String content,
+            String author,
+            LocalDateTime createdAt,
+            LocalDateTime modifiedAt,
+            Integer numLikes,
+            Boolean isDeleted,
+            Boolean thisUserLiked
+    ){
+        this.id = id;
+        this.content = isDeleted? "삭제된 댓글입니다" : content;
+        this.author = author;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.numLikes = numLikes;
+        this.thisUserLiked = thisUserLiked;
+    }
+
+
+    public CommentResponseDto(Comment comment) {
+        this(
+                comment.getId(),
+                comment.getContent(),
+                comment.getUser().getUserId(),
+                comment.getCreatedAt(),
+                comment.getModifiedAt(),
+                comment.getNumLikes(),
+                comment.getIsDeleted(),
+                false
+        );
     }
 }

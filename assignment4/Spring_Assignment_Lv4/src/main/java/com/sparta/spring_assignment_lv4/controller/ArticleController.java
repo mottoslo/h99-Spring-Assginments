@@ -34,8 +34,12 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public ArticleDetailResponseDto getArticleById(@PathVariable Long articleId){
-        return articleService.getArticleById(articleId);
+    public ArticleDetailResponseDto getArticleById(
+            @PathVariable Long articleId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        Long userId = userDetails.getUser().getId();
+        return articleService.getArticleById(articleId, userId);
     }
 
     @PutMapping("/{articleId}")

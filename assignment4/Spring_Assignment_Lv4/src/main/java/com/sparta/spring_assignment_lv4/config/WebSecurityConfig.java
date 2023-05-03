@@ -1,8 +1,11 @@
-package com.sparta.spring_assignment_lv4.utils.springSecurity;
+package com.sparta.spring_assignment_lv4.config;
 
 
 import com.sparta.spring_assignment_lv4.repository.UserRepository;
 import com.sparta.spring_assignment_lv4.utils.JwtUtil;
+import com.sparta.spring_assignment_lv4.utils.springSecurity.JwtAuthenticationFilter;
+import com.sparta.spring_assignment_lv4.utils.springSecurity.LoginSuccessHandler;
+import com.sparta.spring_assignment_lv4.utils.springSecurity.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

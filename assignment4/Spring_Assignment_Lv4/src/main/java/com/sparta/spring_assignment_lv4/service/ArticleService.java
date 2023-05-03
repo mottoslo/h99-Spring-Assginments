@@ -42,14 +42,11 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleDetailResponseDto getArticleById(Long articleId) {
+    public ArticleDetailResponseDto getArticleById(Long articleId, Long userId) {
     Article article = loadArticle(articleId);
     if (article.getIsDeleted()) throw new ArticleDeletedException("삭제된 게시글입니다");
     List<CommentResponseDto> comments =
-            commentRepository.findByRootArticleId(articleId)
-                    .stream()
-                    .map(CommentResponseDto::new)
-                    .collect(Collectors.toList());
+            commentRepository.findByRootArticleIdWithUserLiked(articleId, userId);
 
     return new ArticleDetailResponseDto(article, comments);
     }

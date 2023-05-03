@@ -22,6 +22,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikesRepository commentLikesRepository;
 
+
     @Transactional
     public CommentResponseDto commentOnArticle(User user, CommentPostRequestDto requestDto, Long articleId) {
         Comment comment = requestDto.toComment(user, articleId);
@@ -76,7 +77,7 @@ public class CommentService {
         return commentRepository.findById(commentId).orElseThrow(
                 ()-> new CommentNotFoundException("댓글을 찾을 수 없습니다")
         );
-    }
+}
 
     private void checkCommentModifyAuthorization(User user, Comment comment){
         if(!(user.getRole().equals(Role.ROLE_ADMIN) || commentOwnerValidation(user, comment))){

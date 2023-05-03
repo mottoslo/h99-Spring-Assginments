@@ -59,6 +59,4 @@ public class CommentResponseDto {
                 userLikedCommentIds.contains(comment.getId())
         );
     }
-
-    public void setThisUserLiked(Boolean liked) { this.thisUserLiked = liked; }
 }

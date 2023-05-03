@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
     private final ArticleLikesRepository articleLikesRepository;
 
     @Transactional
@@ -42,11 +42,10 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleDetailResponseDto getArticleById(Long articleId, Long userId) {
+    public ArticleDetailResponseDto getArticleById(User user, Long articleId) {
     Article article = loadArticle(articleId);
     if (article.getIsDeleted()) throw new ArticleDeletedException("삭제된 게시글입니다");
-    List<CommentResponseDto> comments =
-            commentRepository.findByRootArticleIdWithUserLiked(articleId, userId);
+    List<CommentResponseDto> comments = commentService.getCommentsOnArticle(articleId, user);
 
     return new ArticleDetailResponseDto(article, comments);
     }

@@ -16,6 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -53,14 +57,14 @@ public class CommentService {
     }
     @Transactional
     public void likeComment(Long userId, Long commentId) {
-        Comment comment = loadComment(commentId);
+    Comment comment = loadComment(commentId);
         if(commentLikesRepository.existsByCommentIdAndUserId(commentId, userId)){
-            throw new DuplicateLikeRequestException("한 번만 추천할 수 있습니다");
-        }
-        CommentLikes like = new CommentLikes(commentId, userId);
+        throw new DuplicateLikeRequestException("한 번만 추천할 수 있습니다");
+    }
+    CommentLikes like = new CommentLikes(comment.getRootArticleId(), commentId, userId);
         commentLikesRepository.save(like);
         comment.addLike();
-    }
+}
     @Transactional
     public void likeCancelComment(Long userId, Long commentId){
         Comment comment = loadComment(commentId);
@@ -68,6 +72,20 @@ public class CommentService {
             commentLikesRepository.deleteByCommentIdAndUserId(commentId, userId);
             comment.cancelLike();
         }
+    }
+
+    public List<CommentResponseDto> getCommentsOnArticle(Long articleId, User user) {
+
+        List<Long> userLikesOnArticle =
+                commentLikesRepository.findAllByArticleIdAndUserId(articleId,user.getId())
+                        .stream()
+                        .map(CommentLikes::getCommentId)
+                        .toList();
+
+        return commentRepository.findByRootArticleId(articleId)
+                .stream()
+                .map(c -> new CommentResponseDto(c, userLikesOnArticle))
+                .collect(Collectors.toList());
     }
 
 

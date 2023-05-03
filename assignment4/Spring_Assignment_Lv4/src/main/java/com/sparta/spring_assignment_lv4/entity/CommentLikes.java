@@ -17,6 +17,9 @@ public class CommentLikes {
     private Long id;
 
     @Column
+    private Long articleId;
+
+    @Column
     private Long commentId;
 
     @Column
@@ -28,7 +31,8 @@ public class CommentLikes {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    public CommentLikes(Long commentId, Long userId) {
+    public CommentLikes(Long articleId, Long commentId, Long userId) {
+        this.articleId = articleId;
         this.commentId = commentId;
         this.userId = userId;
     }

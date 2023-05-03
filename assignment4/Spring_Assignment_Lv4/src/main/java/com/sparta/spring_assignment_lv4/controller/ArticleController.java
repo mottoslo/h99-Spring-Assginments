@@ -35,11 +35,11 @@ public class ArticleController {
 
     @GetMapping("/{articleId}")
     public ArticleDetailResponseDto getArticleById(
-            @PathVariable Long articleId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long articleId
     ){
-        Long userId = userDetails.getUser().getId();
-        return articleService.getArticleById(articleId, userId);
+        User user = userDetails.getUser();
+        return articleService.getArticleById(user, articleId);
     }
 
     @PutMapping("/{articleId}")

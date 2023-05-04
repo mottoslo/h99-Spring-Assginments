@@ -27,6 +27,34 @@ public class CommentService {
     private final CommentLikesRepository commentLikesRepository;
 
     @Transactional
+    public List<CommentResponseDto> getCommentsOnArticle(Long articleId, User user) {
+
+        List<Long> userLikesOnArticleComments =
+                commentLikesRepository.findAllByArticleIdAndUserId(articleId,user.getId())
+                        .stream()
+                        .map(CommentLikes::getCommentId)
+                        .toList();
+
+        return commentRepository.findByRootArticleIdAndRootCommentIdIsNull(articleId)
+                .stream()
+                .map(c -> new CommentResponseDto(c, userLikesOnArticleComments))
+                .collect(Collectors.toList()); // 원시코멘트만 로드
+    }
+
+    @Transactional
+    public List<CommentResponseDto> getCommentsOnComment(User user, Long articleId,Long rootCommentId ){
+        List<Long> userLikesOnArticleComments =
+                commentLikesRepository.findAllByArticleIdAndUserId(articleId, user.getId())
+                        .stream()
+                        .map(CommentLikes::getCommentId)
+                        .toList();
+        return commentRepository.findByRootCommentId(rootCommentId)
+                .stream()
+                .map(c -> new CommentResponseDto(c, userLikesOnArticleComments))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
     public CommentResponseDto commentOnArticle(User user, CommentPostRequestDto requestDto, Long articleId) {
         Comment comment = requestDto.toComment(user, articleId);
         commentRepository.save(comment);
@@ -35,9 +63,11 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto commentOnComment(User user, CommentPostRequestDto requestDto, Long articleId, Long commentId) {
-        Comment comment = requestDto.toComment(user, articleId, commentId);
-        commentRepository.save(comment);
-        return new CommentResponseDto(comment);
+        Comment rootComment = loadComment(commentId);
+        Comment childComment = requestDto.toComment(user, articleId, commentId);
+        commentRepository.save(childComment);
+        rootComment.addNumComment();
+        return new CommentResponseDto(childComment);
     }
 
     @Transactional
@@ -47,7 +77,6 @@ public class CommentService {
         comment.updateContent(requestDto.getContent());
         return new CommentResponseDto(comment);
     }
-
     @Transactional
     public void deleteComment(User user, Long commentId) {
         Comment comment = loadComment(commentId);
@@ -64,6 +93,7 @@ public class CommentService {
         commentLikesRepository.save(like);
         comment.addLike();
 }
+
     @Transactional
     public void likeCancelComment(Long userId, Long commentId){
         Comment comment = loadComment(commentId);
@@ -71,20 +101,6 @@ public class CommentService {
             commentLikesRepository.deleteByCommentIdAndUserId(commentId, userId);
             comment.cancelLike();
         }
-    }
-
-    public List<CommentResponseDto> getCommentsOnArticle(Long articleId, User user) {
-
-        List<Long> userLikesOnArticle =
-                commentLikesRepository.findAllByArticleIdAndUserId(articleId,user.getId())
-                        .stream()
-                        .map(CommentLikes::getCommentId)
-                        .toList();
-
-        return commentRepository.findByRootArticleId(articleId)
-                .stream()
-                .map(c -> new CommentResponseDto(c, userLikesOnArticle))
-                .collect(Collectors.toList());
     }
 
 

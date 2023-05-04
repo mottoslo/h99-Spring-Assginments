@@ -25,7 +25,7 @@ public class CommentController {
     }
 
     //대댓글달기
-    @PostMapping("/{rootCommentId}/{articleId}")
+    @PostMapping("/{articleId}/{rootCommentId}")
     public CommentResponseDto commentOnComment(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody CommentPostRequestDto requestDto,

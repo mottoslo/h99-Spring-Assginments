@@ -14,6 +14,7 @@ public class CommentResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
     private final Integer numLikes;
+    private final Integer numChildComment;
     private final Boolean thisUserLiked;
 
     public CommentResponseDto(
@@ -23,6 +24,7 @@ public class CommentResponseDto {
             LocalDateTime createdAt,
             LocalDateTime modifiedAt,
             Integer numLikes,
+            Integer numChildComment,
             Boolean isDeleted,
             Boolean userLiked
     ){
@@ -32,6 +34,7 @@ public class CommentResponseDto {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.numLikes = numLikes;
+        this.numChildComment = numChildComment;
         this.thisUserLiked = userLiked;
     }
     public CommentResponseDto(Comment comment) {
@@ -42,6 +45,7 @@ public class CommentResponseDto {
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
                 comment.getNumLikes(),
+                comment.getNumChildComment(),
                 comment.getIsDeleted(),
                 false
         );
@@ -55,6 +59,7 @@ public class CommentResponseDto {
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),
                 comment.getNumLikes(),
+                comment.getNumChildComment(),
                 comment.getIsDeleted(),
                 userLikedCommentIds.contains(comment.getId())
         );

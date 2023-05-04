@@ -1,6 +1,5 @@
 package com.sparta.spring_assignment_lv4.entity;
 
-import com.sparta.spring_assignment_lv4.dto.CommentResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,7 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -35,8 +33,11 @@ public class Comment{
     private Boolean isDeleted = false;
 
     @Column
-    @Version // 동시에 좋아요 눌렀을 때 2차캐시 사용할 수 있다.
+//    @Version // 동시에 좋아요 눌렀을 때 2차캐시 사용할 수 있다.
     private Integer numLikes = 0;
+
+    @Column
+    private Integer numChildComment = 0;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -65,4 +66,6 @@ public class Comment{
     public void addLike() { this.numLikes++; }
 
     public void cancelLike() { this.numLikes--; }
+
+    public void addNumComment() { this.numChildComment++; }
 }

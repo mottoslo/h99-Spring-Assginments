@@ -1,12 +1,10 @@
 package com.sparta.spring_assignment_lv4.controller;
 
 
-import com.sparta.spring_assignment_lv4.dto.ArticleDetailResponseDto;
-import com.sparta.spring_assignment_lv4.dto.ArticleEditRequestDto;
-import com.sparta.spring_assignment_lv4.dto.ArticleListResponseDto;
-import com.sparta.spring_assignment_lv4.dto.ArticlePostRequestDto;
+import com.sparta.spring_assignment_lv4.dto.*;
 import com.sparta.spring_assignment_lv4.entity.User;
 import com.sparta.spring_assignment_lv4.service.ArticleService;
+import com.sparta.spring_assignment_lv4.service.CommentService;
 import com.sparta.spring_assignment_lv4.utils.springSecurity.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +17,7 @@ import java.util.List;
 @RequestMapping("/api/article")
 public class ArticleController {
     private final ArticleService articleService;
+    private final CommentService commentService;
 
     @GetMapping
     public List<ArticleListResponseDto> getArticleList(){
@@ -40,6 +39,16 @@ public class ArticleController {
     ){
         User user = userDetails.getUser();
         return articleService.getArticleById(user, articleId);
+    }
+
+    @GetMapping("/{articleId}/{rootCommentId}") // 대댓글 가져오기
+    public List<CommentResponseDto> getCommentsOnComment(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long articleId,
+            @PathVariable Long rootCommentId
+    ){
+        User user = userDetails.getUser();
+        return commentService.getCommentsOnComment(user, articleId, rootCommentId);
     }
 
     @PutMapping("/{articleId}")

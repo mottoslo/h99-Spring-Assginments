@@ -26,7 +26,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikesRepository commentLikesRepository;
 
-
     @Transactional
     public CommentResponseDto commentOnArticle(User user, CommentPostRequestDto requestDto, Long articleId) {
         Comment comment = requestDto.toComment(user, articleId);

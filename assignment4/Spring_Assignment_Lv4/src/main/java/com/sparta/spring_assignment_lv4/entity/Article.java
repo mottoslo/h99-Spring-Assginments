@@ -29,6 +29,7 @@ public class Article{
     private Boolean isDeleted = false;
 
     @Column
+    @Version  // 동시에 좋아요 눌렀을 때 2차캐시 활용할 수 있다.
     private Integer numLikes = 0;
 
     @CreatedDate

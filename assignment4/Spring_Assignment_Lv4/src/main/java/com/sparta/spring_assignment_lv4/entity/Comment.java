@@ -35,6 +35,7 @@ public class Comment{
     private Boolean isDeleted = false;
 
     @Column
+    @Version // 동시에 좋아요 눌렀을 때 2차캐시 사용할 수 있다.
     private Integer numLikes = 0;
 
     @CreatedDate
@@ -48,6 +49,7 @@ public class Comment{
         this.user = user;
         this.rootArticleId = rootArticleId;
     }
+
 
     public Comment(String content, User user, Long rootArticleId, Long rootCommentId) {
         this.content = content;
